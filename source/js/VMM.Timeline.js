@@ -63,8 +63,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		} else {
 			timeline_id		= "#timelinejs";
 		}
-		
-		trace("VERSION " + version);
+
+        trace(VMM.Language);
 		
 		/* CONFIG
 		================================================== */
@@ -148,12 +148,17 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				nav: {
 					width: 			100,
 					height: 		200
-				}
+				},
+                tmpl: {
+                    useTmpl:        false,
+                    hasTmpl:        false,
+                    tmpl:           '${text}'
+                }
 			},
 			ease: 					"easeInOutExpo",
 			duration: 				1000,
 			gmap_key: 				"",
-			language: 				VMM.Language
+			language: 				VMM.Language['zh-cn']
 		};
 		
 		if ( w != null && w != "") {
@@ -204,12 +209,20 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
 				config.touch = true;
 			}
+
+            if (conf.lang) {
+                var tl = VMM.Language[conf.lang];
+                if (tl) {
+                    config.language = tl;
+                }
+            }
 			
 			config.nav.width			= config.width;
 			config.nav.height			= 200;
 			config.feature.width		= config.width;
 			config.feature.height		= config.height - config.nav.height;
 			config.nav.zoom.adjust		= parseInt(config.start_zoom_adjust, 10);
+            VMM.debug                   = config.debug;
 			VMM.Timeline.Config			= config;
 			VMM.master_config.Timeline	= VMM.Timeline.Config;
 			this.events					= config.events;
@@ -399,7 +412,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		/* PUBLIC FUNCTIONS
 		================================================== */
 		this.init = function(c, _data) {
-			trace('INIT');
 			setViewport();
 			createConfig(c);
 			createStructure();
@@ -560,7 +572,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			updateSize();
 			
 			for(var i = 0; i < data.date.length; i++) {
-				
 				if (data.date[i].startDate != null && data.date[i].startDate != "") {
 					
 					var _date = {};
@@ -598,13 +609,14 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 						_date.headline			= data.date[i].headline;
 						_date.type				= data.date[i].type;
 						_date.date				= VMM.Date.prettyDate(_date.startdate);
-						_date.asset				= data.date[i].asset;
+						_date.assets			= data.date[i].assets;
 						_date.fulldate			= _date.startdate.getTime();
 						_date.text				= data.date[i].text;
 						_date.content			= "";
 						_date.tag				= data.date[i].tag;
 						_date.slug				= data.date[i].slug;
 						_date.uniqueid			= VMM.Util.unique_ID(7);
+                        _date.geo               = data.date[i].geo;
 						
 						_dates.push(_date);
 					} 
@@ -669,7 +681,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				_date.text			= data.text;
 				_date.type			= "start";
 				_date.date			= VMM.Date.prettyDate(data.startDate);
-				_date.asset			= data.asset;
+				_date.assets		= data.assets;
 				_date.slug			= false;
 				_date.needs_slug	= false;
 				_date.fulldate		= _date.startdate.getTime();

@@ -1452,8 +1452,8 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				_marker_thumb			= "";
 				
 				// THUMBNAIL
-				if (data[i].asset != null && data[i].asset != "") {
-					VMM.appendElement(_marker_content, VMM.MediaElement.thumbnail(data[i].asset, 24, 24, data[i].uniqueid));
+				if (data[i].assets != null && data[i].assets.length > 0) {
+					VMM.appendElement(_marker_content, VMM.MediaElement.thumbnail(data[i].assets[0], 24, 24, data[i].uniqueid));
 				} else {
 					VMM.appendElement(_marker_content, "<div style='margin-right:7px;height:50px;width:2px;float:left;'></div>");
 				}
@@ -1465,15 +1465,16 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 						trace("SLUG")
 						_marker_title = VMM.Util.untagify(data[i].slug);
 						has_title = true;
-					} else {
-						var m = VMM.MediaType(data[i].asset.media);
-						if (m.type == "quote" || m.type == "unknown") {
-							_marker_title = VMM.Util.untagify(m.id);
-							has_title = true;
-						} else {
-							has_title = false;
-						}
-					}
+                    } else {
+                        if (data[i].assets != null && data[i].assets.length > 0) {
+                            var m = VMM.MediaType(data[i].assets[0].media);
+                            if (m.type == "quote" || m.type == "unknown") {
+                                _marker_title = VMM.Util.untagify(m.id);
+                                has_title = true;
+                            } 
+                        }
+                        has_title = false;
+                    }
 				} else if (data[i].title != "" || data[i].title != " ") {
 					trace(data[i].title)
 					_marker_title = VMM.Util.untagify(data[i].title);

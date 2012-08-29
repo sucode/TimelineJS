@@ -275,7 +275,8 @@ function trace( msg ) {
                     } 
                 }
             }
-			console.log(line + "\t" + msg);
+			console.log(line);
+            console.log(msg);
 		} else if ( typeof( jsTrace ) != 'undefined' ) {
 			jsTrace.send( msg );
 		} else {
@@ -1504,13 +1505,17 @@ if(typeof VMM != 'undefined' && typeof VMM.Util == 'undefined') {
 		/*	* MERGE CONFIG
 		================================================== */
 		mergeConfig: function(config_main, config_to_merge) {
-			var x;
-			for (x in config_to_merge) {
-				if (Object.prototype.hasOwnProperty.call(config_to_merge, x)) {
-					config_main[x] = config_to_merge[x];
-				}
-			}
-			return config_main;
+            if (typeof(jQuery) != 'undefined') {
+                return jQuery.extend(true, config_main, config_to_merge);
+            } else {
+                var x;
+                for (x in config_to_merge) {
+                    if (Object.prototype.hasOwnProperty.call(config_to_merge, x)) {
+                        config_main[x] = config_to_merge[x];
+                    }
+                }
+                return config_main;
+            }
 		},
 		
 		/*	* GET OBJECT ATTRIBUTE BY INDEX
@@ -1950,6 +1955,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Util == 'undefined') {
 		
 	}).init();
 }
+
 
 /* **********************************************
      Begin LazyLoad.js
@@ -2430,40 +2436,90 @@ LoadLib = (function (doc) {
 
 /* DEFAULT LANGUAGE 
 ================================================== */
-if(typeof VMM != 'undefined' && typeof VMM.Language == 'undefined') {
-	VMM.Language = {
-		lang: "en",
-		api: {
-			wikipedia: "en"
-		},
-		date: {
-			month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
-			day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-			day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."]
-		}, 
-		dateformats: {
-			year: "yyyy",
-			month_short: "mmm",
-			month: "mmmm yyyy",
-			full_short: "mmm d",
-			full: "mmmm d',' yyyy",
-			time_no_seconds_short: "h:MM TT",
-			time_no_seconds_small_date: "h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
-			full_long: "mmm d',' yyyy 'at' h:MM TT",
-			full_long_small_date: "h:MM TT'<br/><small>mmm d',' yyyy'</small>'"
-		},
-		messages: {
-			loading_timeline: "Loading Timeline... ",
-			return_to_title: "Return to Title",
-			expand_timeline: "Expand Timeline",
-			contract_timeline: "Contract Timeline",
-			wikipedia: "From Wikipedia, the free encyclopedia",
-			loading_content: "Loading Content",
-			loading: "Loading"
-		}
-	}
+if(typeof VMM != 'undefined') {
+    var lang_en = {
+            lang: "en",
+            api: {
+                wikipedia: "en"
+            },
+            date: {
+                      month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                      month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
+                      day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                      day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."]
+                  }, 
+            dateformats: {
+                             year: "yyyy",
+                             month_short: "mmm",
+                             month: "mmmm yyyy",
+                             full_short: "mmm d",
+                             full: "mmmm d',' yyyy",
+                             time_no_seconds_short: "h:MM TT",
+                             time_no_seconds_small_date: "h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
+                             full_long: "mmm d',' yyyy 'at' h:MM TT",
+                             full_long_small_date: "h:MM TT'<br/><small>mmm d',' yyyy'</small>'"
+                         },
+            messages: {
+                          loading_timeline: "Loading Timeline... ",
+                          return_to_title: "Return to Title",
+                          expand_timeline: "Expand Timeline",
+                          contract_timeline: "Contract Timeline",
+                          wikipedia: "From Wikipedia, the free encyclopedia",
+                          loading_content: "Loading Content",
+                          loading: "Loading"
+                      }
+        }
+
+    if (typeof VMM.Language == 'undefined') {
+        VMM.Language = {};
+    }
+
+    VMM.Util.mergeConfig(VMM.Language, {"en" : lang_en});
 };
+
+
+/* **********************************************
+     Begin zh-cn.js
+********************************************** */
+
+if(typeof VMM != 'undefined') {
+    var lang_zh_cn = {
+        lang: "zh-cn",
+        date: {
+                  month: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                  month_abbr: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                  day: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+                  day_abbr: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+              }, 
+        dateformats: {
+                         year: "yyyy",
+                         month_short: "mmm",
+                         month: "yyyy'年'mmmm",
+                         full_short: "mmmd",
+                         full: "yyyy'年'mmmmd",
+                         time_no_seconds_short: "HH:MM",
+                         time_no_seconds_small_date: "HH:MM'<br/><small>'yyyy'年'mmmmd'</small>'",
+                         full_long: "dddd',' HH:MM yyyy'年'mmmd",
+                         full_long_small_date: "HH:MM'<br/><small>'dddd',' yyyy'年'mmmd'</small>'"
+                     },
+        messages: {
+                      loading_timeline: "加载中... ",
+                      return_to_title: "回到第一页",
+                      expand_timeline: "伸展时间",
+                      contract_timeline: "缩短时间",
+                      loading_content: "内容加载中...",
+                      loading: "加载中..."
+
+                  }
+    }
+
+    if (typeof VMM.Language == 'undefined') {
+        VMM.Language = {};
+    }
+
+    VMM.Util.mergeConfig(VMM.Language, {'zh-cn' : lang_zh_cn});
+}
+
 
 /* **********************************************
      Begin VMM.MediaElement.js
@@ -2969,7 +3025,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 					nav: {
 						width:		100, 
 						height:		200
-					} 
+					}, 
+                    tmpl: {
+                              useTmpl:        false,
+                              hasTmpl:        false,
+                              tmpl:           '${text}'
+                    }
 				} 
 			};
 		}
@@ -3194,7 +3255,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			slides = [];
 			
 			for(i = 0; i < d.length; i++) {
-				var _slide = new VMM.Slider.Slide(d[i], $slides_items);
+				var _slide = new VMM.Slider.Slide(d[i], $slides_items, config.slider.tmpl);
 				//_slide.show();
 				slides.push(_slide);
 			}
@@ -3614,9 +3675,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 ================================================== */
 
 if (typeof VMM.Slider != 'undefined') {
-	VMM.Slider.Slide = function(d, _parent) {
+	VMM.Slider.Slide = function(d, _parent, parent_config) {
 		
-		var $media, $text, $slide, $wrap, element, c,
+		var config, $media, $text, $slide, $wrap, element, c,
 			data		= d,
 			slide		= {},
 			element		= "",
@@ -3633,10 +3694,30 @@ if (typeof VMM.Slider != 'undefined') {
 		_id				= _id + data.uniqueid;
 		this.enqueue	= _enqueue;
 		this.id			= _id;
+        _tmpl           = "${text}",
 		
 		element		=	VMM.appendAndGetElement(_parent, "<div>", "slider-item");
 		c = {slide:"", text: "", media: "", media_element: "", layout: "content-container layout", has: { headline: false, text: false, media: false }};
 		
+        if (typeof parent_config != 'undefined') {
+            config = parent_config;
+        } else {
+            config = {
+                useTmpl : false,
+                hasTmpl : false,
+            }
+        }
+
+        if (config.useTmpl && typeof(jQuery) != 'undefined' && typeof(jQuery.tmpl) != 'undefined') {
+            if (!$.template["__slide_tmpl__"]) {
+                var tmplToComp = _tmpl;
+                if (typeof(config.tmpl) != 'undefined' && config.tmpl.length > 0) {
+                    tmplToComp = config.tmpl;
+                }
+                $.template("__slide_tmpl__", tmplToComp);
+            }
+            config.hasTmpl = true
+        }
 		/* PUBLIC
 		================================================== */
 		this.show = function(skinny) {
@@ -3731,7 +3812,11 @@ if (typeof VMM.Slider != 'undefined') {
 			preloaded = true;
 			timer.skinny = skinny;
 			
-			buildSlide();
+            if (config.hasTmpl) {
+                buildSlideFromTmpl();
+            } else {
+			    buildSlide();
+            }
 			
 			//clearTimeout(timer.pushque);
 			clearTimeout(timer.render);
@@ -3785,6 +3870,12 @@ if (typeof VMM.Slider != 'undefined') {
 			}
 		}
 		
+        var buildSlideFromTmpl = function() {
+            trace("BUILDSLIDE FROM TMPL");
+            $wrap = VMM.appendAndGetElement(element, "<div>", "content");
+            $.tmpl('__slide_tmpl__', data).appendTo($wrap);
+        }
+
 		var buildSlide = function() {
 			trace("BUILDSLIDE");
             trace(data);
@@ -3848,11 +3939,14 @@ if (typeof VMM.Slider != 'undefined') {
 			
 			/* MEDIA
 			================================================== */
-			if (data.asset != null && data.asset != "") {
-				if (data.asset.media != null && data.asset.media != "") {
-					c.has.media	= true;
-					$media		= VMM.appendAndGetElement($slide, "<div>", "media", VMM.MediaElement.create(data.asset, data.uniqueid));
-				}
+			if (data.assets != null && data.assets.length > 0) {
+                for (var index in data.assets) {
+                    var asset = data.assets[index];
+                    if (asset.media != null && asset.media != "") {
+                        c.has.media	= true;
+                        $media		= VMM.appendAndGetElement($slide, "<div>", "media", VMM.MediaElement.create(asset, data.uniqueid));
+                    }
+                }
 			}
 			
 			/* COMBINE
@@ -4639,6 +4733,7 @@ Utf8.decode = function(strUtf) {
 // @codekit-prepend "VMM.StoryJS.License.js";
 // @codekit-prepend "Core/VMM.Core.js";
 // @codekit-prepend "Language/VMM.Language.js";
+// @codekit-prepend "Language/locale/zh-cn.js";
 // @codekit-prepend "Media/VMM.Media.js";
 // @codekit-prepend "Slider/VMM.DragSlider.js";
 // @codekit-prepend "Slider/VMM.Slider.js";
@@ -4732,8 +4827,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		} else {
 			timeline_id		= "#timelinejs";
 		}
-		
-		trace("VERSION " + version);
+
+        trace(VMM.Language);
 		
 		/* CONFIG
 		================================================== */
@@ -4817,12 +4912,17 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				nav: {
 					width: 			100,
 					height: 		200
-				}
+				},
+                tmpl: {
+                    useTmpl:        false,
+                    hasTmpl:        false,
+                    tmpl:           '${text}'
+                }
 			},
 			ease: 					"easeInOutExpo",
 			duration: 				1000,
 			gmap_key: 				"",
-			language: 				VMM.Language
+			language: 				VMM.Language['zh-cn']
 		};
 		
 		if ( w != null && w != "") {
@@ -4873,12 +4973,20 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
 				config.touch = true;
 			}
+
+            if (conf.lang) {
+                var tl = VMM.Language[conf.lang];
+                if (tl) {
+                    config.language = tl;
+                }
+            }
 			
 			config.nav.width			= config.width;
 			config.nav.height			= 200;
 			config.feature.width		= config.width;
 			config.feature.height		= config.height - config.nav.height;
 			config.nav.zoom.adjust		= parseInt(config.start_zoom_adjust, 10);
+            VMM.debug                   = config.debug;
 			VMM.Timeline.Config			= config;
 			VMM.master_config.Timeline	= VMM.Timeline.Config;
 			this.events					= config.events;
@@ -5068,7 +5176,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		/* PUBLIC FUNCTIONS
 		================================================== */
 		this.init = function(c, _data) {
-			trace('INIT');
 			setViewport();
 			createConfig(c);
 			createStructure();
@@ -5229,7 +5336,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			updateSize();
 			
 			for(var i = 0; i < data.date.length; i++) {
-				
 				if (data.date[i].startDate != null && data.date[i].startDate != "") {
 					
 					var _date = {};
@@ -5267,13 +5373,14 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 						_date.headline			= data.date[i].headline;
 						_date.type				= data.date[i].type;
 						_date.date				= VMM.Date.prettyDate(_date.startdate);
-						_date.asset				= data.date[i].asset;
+						_date.assets			= data.date[i].assets;
 						_date.fulldate			= _date.startdate.getTime();
 						_date.text				= data.date[i].text;
 						_date.content			= "";
 						_date.tag				= data.date[i].tag;
 						_date.slug				= data.date[i].slug;
 						_date.uniqueid			= VMM.Util.unique_ID(7);
+                        _date.geo               = data.date[i].geo;
 						
 						_dates.push(_date);
 					} 
@@ -5338,7 +5445,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				_date.text			= data.text;
 				_date.type			= "start";
 				_date.date			= VMM.Date.prettyDate(data.startDate);
-				_date.asset			= data.asset;
+				_date.assets		= data.assets;
 				_date.slug			= false;
 				_date.needs_slug	= false;
 				_date.fulldate		= _date.startdate.getTime();
@@ -6826,8 +6933,8 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				_marker_thumb			= "";
 				
 				// THUMBNAIL
-				if (data[i].asset != null && data[i].asset != "") {
-					VMM.appendElement(_marker_content, VMM.MediaElement.thumbnail(data[i].asset, 24, 24, data[i].uniqueid));
+				if (data[i].assets != null && data[i].assets.length > 0) {
+					VMM.appendElement(_marker_content, VMM.MediaElement.thumbnail(data[i].assets[0], 24, 24, data[i].uniqueid));
 				} else {
 					VMM.appendElement(_marker_content, "<div style='margin-right:7px;height:50px;width:2px;float:left;'></div>");
 				}
@@ -6839,15 +6946,16 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 						trace("SLUG")
 						_marker_title = VMM.Util.untagify(data[i].slug);
 						has_title = true;
-					} else {
-						var m = VMM.MediaType(data[i].asset.media);
-						if (m.type == "quote" || m.type == "unknown") {
-							_marker_title = VMM.Util.untagify(m.id);
-							has_title = true;
-						} else {
-							has_title = false;
-						}
-					}
+                    } else {
+                        if (data[i].assets != null && data[i].assets.length > 0) {
+                            var m = VMM.MediaType(data[i].assets[0].media);
+                            if (m.type == "quote" || m.type == "unknown") {
+                                _marker_title = VMM.Util.untagify(m.id);
+                                has_title = true;
+                            } 
+                        }
+                        has_title = false;
+                    }
 				} else if (data[i].title != "" || data[i].title != " ") {
 					trace(data[i].title)
 					_marker_title = VMM.Util.untagify(data[i].title);
@@ -6986,6 +7094,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 	};
 	
 }
+
 
 /* **********************************************
      Begin VMM.Timeline.DataObj.js
