@@ -412,10 +412,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			VMM.Date.setLanguage(config.language);
 			VMM.master_config.language = config.language;
 			
-			// EXTERNAL API
-			VMM.ExternalAPI.setKeys(config.api_keys);
-			VMM.ExternalAPI.googlemaps.setMapType(config.maptype);
-			
 			// EVENTS
 			VMM.bindEvent(global, onDataReady, config.events.data_ready);
 			VMM.bindEvent(global, showMessege, config.events.messege);
