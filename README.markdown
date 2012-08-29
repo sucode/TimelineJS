@@ -1,42 +1,52 @@
 # TimelineJS 
 
-## modify
+## Modify
 1. remove unused code to reduce size (only support json)
-2. support multi media
+2. support multi media and geo
 3. add jQuery template support to slider
-
-## Document history with TimelineJS
-
-There are lots of timeline tools on the web but they are almost all either
-hard on the eyes or hard to use. Create timelines that are at the same time
-beautiful and intuitive for users
-
-TimelineJS is great for pulling in media from different sources. Just throw in a
-link from Twitter, YouTube, Flickr, Vimeo, Google Maps or SoundCloud and
-TimelineJS will format it to fit perfectly. More media types will be supported
-in the future.
-
-Creating one is as easy as filling in a Google spreadsheet or as detailed as
-JSON.
  
 ## Add it to your site
-### Using Inline (*easiest*)
-Place the embed code where you want the timeline to show in the `<body>` of your site. See [Config Options](#config-options) for a full list of what you can set in the config.
+### Using Inline
+Place the code where you want the timeline to show in the `<body>` of your site. See [Config Options](#config-options) for a full list of what you can set in the config.
 
 ```html
 	<div id="timeline"></div>
 	<script type="text/javascript">
 	    var timeline_config = {
-			width:				'100%',
-			height:				'600',
 			source:				'path_to_json/or_link_to_googlespreadsheet',
 			start_at_end: 		false,							//OPTIONAL START AT LATEST DATE
 			start_at_slide:		'4',							//OPTIONAL START AT SPECIFIC SLIDE
 			start_zoom_adjust:	'3',							//OPTIONAL TWEAK THE DEFAULT ZOOM LEVEL
 			hash_bookmark:		true,							//OPTIONAL LOCATION BAR HASHES
-			font:				'Bevan-PotanoSans',				//OPTIONAL FONT
 			debug:				true,							//OPTIONAL DEBUG TO CONSOLE
-			lang:				'fr',							//OPTIONAL LANGUAGE
+			lang:				'zh-cn',						//OPTIONAL LANGUAGE
+		}
+
+        var timeline = new VMM.Timeline("#timeline", 800, 600);
+        timeline.init(timeline_config);
+	</script>
+```
+
+### Use jQuery template
+Use jQuery template to customer Slider:
+
+```html
+	<div id="timeline"></div>
+	<script type="text/javascript">
+	    var timeline_config = {
+			source:				'path_to_json/or_link_to_googlespreadsheet',
+			start_at_end: 		false,							//OPTIONAL START AT LATEST DATE
+			start_at_slide:		'4',							//OPTIONAL START AT SPECIFIC SLIDE
+			start_zoom_adjust:	'3',							//OPTIONAL TWEAK THE DEFAULT ZOOM LEVEL
+			hash_bookmark:		true,							//OPTIONAL LOCATION BAR HASHES
+			debug:				true,							//OPTIONAL DEBUG TO CONSOLE
+			lang:				'zh-cn',						//OPTIONAL LANGUAGE
+            slider: {
+                tmpl: {
+                    useTmpl: true,                              // enable jQuery template, false by default
+                    tmpl: '${text}',                            // your awesome template here
+                }
+            }
 		}
 
         var timeline = new VMM.Timeline("#timeline", 800, 600);
